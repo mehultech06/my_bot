@@ -21,7 +21,7 @@ slam_toolbox:
     # will use pose
     map_file_name: /home/mehul/bot_ws/my_map_serial
     # map_start_pose: [0.0, 0.0, 0.0]
-    map_start_at_dock: true
+    map_start_at_dock: false
 
     debug_logging: false
     throttle_scans: 1
@@ -37,7 +37,7 @@ slam_toolbox:
 
     # General Parameters
     use_scan_matching: true
-    use_scan_barycenter: true
+    use_scan_barycenter: true 
     minimum_travel_distance: 0.5
     minimum_travel_heading: 0.5
     scan_buffer_size: 10
