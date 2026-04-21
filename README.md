@@ -1,65 +1,78 @@
-## 🚀 ROS 2 Autonomous Navigation using SLAM & Nav2
+# 🤖 ROS 2 Autonomous Navigation using SLAM, Nav2 & Ball Tracking
 
-This project demonstrates a complete autonomous mobile robot pipeline using **ROS 2 HUMBLE**, including mapping (SLAM), localization, and navigation in a simulated environment.
+This project demonstrates a complete autonomous mobile robot pipeline using **ROS 2 Humble**, including mapping (SLAM), localization, autonomous navigation, and real-time **ball tracking using OpenCV** in a simulated environment.
 
-The system allows a robot to build a map, localize itself on that map, and navigate autonomously to user-defined goals.
+The robot is capable of:
+
+- 🗺️ Creating maps using SLAM
+- 📍 Localizing itself on a saved map
+- 🧭 Navigating autonomously to goal positions
+- 🎯 Detecting and tracking a colored ball
+- 🧪 Running fully in Gazebo simulation
+- 📊 Visualizing everything in RViz2
 
 ---
 
 ## 📌 Overview
 
-This project implements the full workflow of autonomous navigation:
+This project covers the full robotics workflow:
 
-* 🗺️ **Mapping using SLAM**
-* 💾 **Saving generated maps**
-* 📍 **Localization using AMCL**
-* 🧭 **Autonomous navigation using Nav2**
-* 🧪 **Simulation in Gazebo**
-* 📊 **Visualization in RViz**
+- 🗺️ **SLAM Mapping**
+- 💾 **Map Saving**
+- 📍 **Localization using AMCL**
+- 🧭 **Navigation using Nav2**
+- 🎯 **Ball Tracking using OpenCV**
+- 🖥️ **Gazebo Simulation**
+- 📊 **RViz Visualization**
 
 ---
 
 ## 🧠 Features
 
-* Real-time environment mapping using SLAM
-* Map saving and reuse for navigation
-* Accurate localization on pre-built maps
-* Autonomous path planning and obstacle avoidance
-* Fully tested in Gazebo simulation
-* Modular and scalable ROS 2 package
+- Real-time environment mapping using SLAM Toolbox
+- Accurate localization using AMCL
+- Autonomous path planning and navigation
+- Obstacle avoidance
+- Real-time ball detection and tracking
+- Gazebo simulation support
+- ROS 2 modular package structure
 
 ---
 
 ## 🛠️ Tech Stack
 
-* ROS 2 Humble
-* Nav2 (Navigation Stack)
-* SLAM Toolbox
-* Gazebo Simulator
-* RViz2
+- ROS 2 Humble
+- Nav2
+- SLAM Toolbox
+- Gazebo
+- RViz2
+- OpenCV
+- Python
+- URDF / Xacro
 
 ---
 
-## 📂 Package Structure
+## 📂 Project Structure
 
 ```bash
 my_bot/
 │── launch/
-│   ├── slam_launch.py
-│   ├── localization_launch.py
-│   ├── navigation_launch.py
-│   ├── gazebo.launch.py
+│   ├── launch_sim.launch.py
+│   ├── ball_tracker.launch.py
 │
 │── config/
+│   ├── mapper_params_online_async.yaml
 │   ├── nav2_params.yaml
-│   ├── amcl.yaml
 │
-│── maps/
-│   ├── map.yaml
-│   ├── map.pgm
+│── worlds/
+│   ├── obstacle.world
 │
 │── rviz/
-│   ├── config.rviz
+│   ├── my_bot.rviz
+│
+│── urdf/
+│── meshes/
+│── scripts/
 ```
 
 ---
@@ -67,17 +80,19 @@ my_bot/
 ## ⚙️ Installation
 
 ```bash
-# Go to your ROS2 workspace
-cd ~/ros2_ws/src
+# Go to workspace src
+cd ~/bot_ws/src
 
-# Clone the repository
+# Clone repository
 git clone https://github.com/mehultech06/my_bot.git
 
-# Build the workspace
-cd ~/ros2_ws
+# Go back to workspace
+cd ~/bot_ws
+
+# Build workspace
 colcon build
 
-# Source the workspace
+# Source workspace
 source install/setup.bash
 ```
 
@@ -107,6 +122,11 @@ ros2 launch my_bot slam_launch.py
 ros2 run nav2_map_server map_saver_cli -f my_map
 ```
 
+This will create:
+
+- `my_map.pgm`
+- `my_map.yaml`
+
 ---
 
 ### 4️⃣ Run Localization
@@ -115,49 +135,94 @@ ros2 run nav2_map_server map_saver_cli -f my_map
 ros2 launch my_bot localization_launch.py
 ```
 
+### Important:
+In RViz:
+- Set **Fixed Frame = map**
+- Click **2D Pose Estimate**
+- Set the robot initial position
+
 ---
 
-### 5️⃣ Start Autonomous Navigation
+### 5️⃣ Start Navigation
 
 ```bash
 ros2 launch my_bot navigation_launch.py
+```
+
+Use **2D Goal Pose** in RViz to send goals.
+
+---
+
+## 🎯 Ball Tracking using OpenCV
+
+This project also includes **real-time ball tracking** using OpenCV.
+
+---
+
+### 📌 Features
+
+- Detects colored ball
+- Tracks center position
+- Uses camera feed from `/camera/image_raw`
+- Real-time processing
+
+---
+
+### ⚙️ Working Principle
+
+1. Capture image from camera topic
+2. Convert BGR to HSV
+3. Apply color masking
+4. Detect contours
+5. Find largest contour
+6. Track ball center
+
+---
+
+### 🚀 Run Ball Tracking
+
+```bash
+ros2 launch my_bot ball_tracker.launch.py
 ```
 
 ---
 
 ## 📸 Results
 
-* ✅ Successfully generated map using SLAM
-* ✅ Accurate localization using AMCL
-* ✅ Autonomous navigation to goal positions
-
-👉 *Add screenshots here (RViz + Gazebo)*
+- ✅ SLAM mapping working
+- ✅ Localization working
+- ✅ Autonomous navigation working
+- ✅ Ball tracking working
 
 ---
 
 ## 🚀 Future Improvements
 
-* Deploy on real robot hardware
-* Improve obstacle avoidance in dynamic environments
-* Add sensor fusion (LiDAR + camera)
-* Multi-robot navigation support
+- Ball-following robot
+- Dynamic obstacle avoidance
+- Real robot deployment
+- Camera + LiDAR sensor fusion
+- Multi-object tracking
 
 ---
 
 ## 🤝 Contributing
 
-Contributions are welcome! Feel free to fork the repository and submit a pull request.
+Contributions are welcome.
+
+Feel free to fork the repository and submit a pull request.
 
 ---
 
-## 📬 Author
+## 👨‍💻 Author
 
-**Mehul Sharma**
-B.Tech Robotics & Automation
+**Mehul Sharma**  
+B.Tech Robotics & Automation  
+
 GitHub: https://github.com/mehultech06
 
 ---
 
 ## ⭐ Support
 
-If you found this project helpful, please consider giving it a ⭐ on GitHub!
+If you like this project, please give it a ⭐ on GitHub.
